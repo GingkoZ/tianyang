@@ -1,0 +1,61 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}批量添加学员{% endblock %}
+{% block body %}
+
+<form id="student-create-form" class="form-horizontal" method="post" action="{{ path('course_manage_batch_students', {id:course.id}) }}" style="height: 300px;"> 
+  {% if course.status == 'published' %}
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="student-nickname">课程</label>
+      </div>
+      <div class="col-md-6 controls">
+        <span>{{course.title}}</span>
+        {# <input type="text" disabled="disabled"  id="student-nickname" value="{{course.title}}" class="form-control" 
+        /> #}
+      </div>
+    </div>
+  	<div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="student-nickname">学员组织</label>
+      </div>
+      <div class="col-md-6 controls" style="position:relative">
+     
+        <input id="citySel" type="text" name="organizationName" readonly class="form-control" />
+        <input type="hidden" id="organization_id" name="organizationId"  />
+        <div id="menuContent" class="menuContent" style="display:none; position: absolute;z-index:2000 ;left:15px;top:28px">
+          <ul id="treeDemo"  data-url="{{ path('organization_getNodes')}}"  class="zTreeStylt" style="margin-top:0; width:180px; height: 240px;"></ul>
+        </div>
+    </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="student-nickname">包括子节点</label>
+      </div>
+      <div class="col-md-6 controls">
+          {{
+        radios('isChildNode', {'active':'是',
+        'none':'否'},
+        'none' ) }}
+      </div>
+    </div>
+
+  {% else %}
+    <div class="empty">{{dict_text('courseStatus', course.status)}}课程不能添加学员，请课程发布后再添加。</div>
+  {% endif %}
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  {% if course.status == 'published' %}
+    <button id="student-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#student-create-form" data-submiting-text="正在保存...">确定</button>
+  {% endif %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('customwebbundle/controller/course-manage/student-create')</script>
+{% endblock %}

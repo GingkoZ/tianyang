@@ -1,0 +1,16 @@
+{% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
+
+{% block title %}批量添加学员 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'students' %}
+{% set script_controller = 'customwebbundle/controller/customClassroomManage/lead-excel' %}
+
+{% block main %}
+{{ web_macro.flash_messages() }}
+
+    <div class="row">
+        <div class="col-md-offset-2"><b>导入成功！<a type="button" class="btn btn-primary" href="{{ path('classroom_manage_student_batch_create',{id:classroom.id}) }}">继续导入</a>
+        <a type="button" class="btn btn-primary" href="{{path('classroom_manage_students', {id:classroom.id}) }}">导入完成</a></b></div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% if organization.id %}编辑组织机构{% else %}添加组织机构{% endif %}{% endblock %}
+
+{% block body %}
+<div id="knowledge-creater-widget">
+
+  <form id="knowledge-form" class="form-horizontal" action="{% if organization.id %}{{ path('admin_organization_edit', {id:organization.id}) }}{% else %}{{ path('admin_organization_create') }}{% endif %}" method="post">
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="knowledge-name-field">名称</label>
+      <div class="col-md-8 controls">
+        <input class="form-control" id="knowledge-name-field" type="text" name="name" value="{{ organization.name }}" tabindex="1">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="knowledge-weight-field">显示序号</label>
+      <div class="col-md-8 controls">
+        <input class="form-control" id="knowledge-weight-field" type="text" name="weight" value="{{ organization.weight }}" tabindex="2">
+        <div class="help-block">显示序号需为整数，知识点按序号的顺序从小到大排序。</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="knowledge-code-field">编码</label>
+      <div class="col-md-8 controls">
+        <input class="form-control" id="knowledge-code-field" type="text" name="code" {# value="{{ knowledge.code }}" data-url="{{ path('admin_knowledge_checkcode', {exclude:knowledge.code}) }}" tabindex="3" #}>
+        
+      </div>
+    </div>
+
+   
+
+   <div class="form-group">
+      <label class="col-md-2 control-label" for="knowledge-description-field">机构描述</label>
+      <div class="col-md-8 controls">
+        <textarea class="form-control" id="knowledge-description-field" style="height:100px;" name="description" tabindex="4">{{organization.description}}</textarea>
+        <div class="help-block">非必填</div>
+      </div>
+    </div>
+
+    <input type="hidden" name="id" value="{{ organization.id }}">
+     <input type="hidden" name="tid" value="{{ organization.tid }}"> 
+   {#  <input type="hidden" name="sequence" value="{{ knowledge.sequence }}">
+    <input type="hidden" name="categoryId" value="{{ knowledge.categoryId }}"> #}
+    <input type="hidden" name="parentId" value="{{ organization.parentId }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+</div>
+<script type="text/javascript"> app.load('customadminbundle/controller/organization/save-modal') </script>
+{% endblock %}
+
+{% block footer %}
+
+    <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
+  <button id="knowledge-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#knowledge-form" tabindex="5">保存</button>
+{% endblock %}

@@ -1,0 +1,60 @@
+<!doctype html>
+
+<head>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+<link rel="stylesheet" media="screen" href="{{ asset('bundles/customweb/css/smvp.css') }}" />
+</head>
+<body>
+	<input id="courseId" type="hidden" value="{{ courseId }}"></input>
+  	<input id="lessonId" type="hidden" value="{{ lessonId }}"></input>
+    {{url|raw}}
+    <script>
+	   var app = {};
+	   app.basePath = '';
+	   app.jsPaths = {"common":"common","theme":"\/themes\/default-b\/js","couponbundle":"\/bundles\/coupon\/js","questionplusbundle":"\/bundles\/questionplus\/js","vipbundle":"\/bundles\/vip\/js","customwebbundle":"\/bundles\/customweb\/js","customadminbundle":"\/bundles\/customadmin\/js","homeworkbundle":"\/bundles\/homework\/js"};
+
+	  app.mainScript = "{{ asset('bundles/topxiaweb/js/app.js') }}";
+	</script>
+
+	<script src="{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js') }}"></script>
+	<script src="{{ asset('assets/libs/seajs-global-config.js') }}"></script>
+	<script>
+	var player;
+	var time = 0;
+	var videoStauts =  true;
+
+	function getTimes(){
+		if (videoStauts) {
+			player.pause();
+		}
+		
+		return time;
+	}
+
+	seajs.use(app.mainScript, function(){
+	    seajs.use(app.mainScript, function(){
+		player = smvp.players.get();
+	    var recordWatchTimeId = 0;
+	    var $addBtn = $("#addExercise");	   
+	    var $doc;
+	  player.ready(function() {
+
+      player.play(function(){
+
+      	$addBtn.show();
+      	videoStauts = true;
+      }).pause(function() {
+      	videoStauts = false;
+      }).progress(function(e) {
+        time = e.time;
+      }).complete(function() {
+        $addBtn.hide();
+      });
+    });
+	    
+	    });
+	});
+
+	</script>
+</body>
+</html>

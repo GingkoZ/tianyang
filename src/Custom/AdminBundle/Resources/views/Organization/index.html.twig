@@ -1,0 +1,52 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_organization' %}
+
+{% set script_controller = 'customadminbundle/controller/organization/main' %}
+{% block page_buttons%}
+	<div class="page-header clearfix">
+   <button class="btn btn-sm btn-info pull-right add-category" id="add-knowledge" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_organization_create') }}" data-turl="{{ path('admin_organization_create') }}">添加组织机构</button>
+
+  <button class="btn btn-sm btn-info pull-right add-category hidden" id="edit-knowledge" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_organization_edit') }}" data-turl="{{ path('admin_organization_edit') }}">编辑组织机构</button>
+  <button class="btn btn-sm btn-info pull-right add-category hidden" id="userList" data-toggle="modal" data-target="#modal" data-url="{{ path('organization_user_list') }}" data-turl = "{{ path('organization_user_list') }}" >用户列表</button>
+
+
+</div>
+{% endblock %}
+{% block main %}
+<style>
+	.tree-node{
+		width: 150px;height: 100%;text-align: left;float: right;
+	}
+	.list-top{
+        padding:5px 5px 10px; border-bottom : 1px solid #999;
+	}
+	.list-top .fis{
+		min-width: 100px;float:left;
+	}
+	.list-top .right{
+        min-width: 150px;float:right;
+	}
+    .list-top .right.do{
+    	min-width: 108px;
+    	text-align: center;
+    }
+</style>
+
+{# <a href="#" data-toggle="modal" data-target="#modal" data-url="{{path('admin_organization_select_modal')}}">
+	<input id="organization_id" / >
+<input readonly="readonly" id="organization_name" data-target="#modal" data-url="organization-check-modal.html.twig">
+</a> #}
+<div class="clearfix list-top">
+	<div class="fis">组织</div>
+	<div class="right do">操作</div>
+	<div class="right">本级人数</div>
+	<div class="right">总人数</div>
+	<div class="right">子部门</div>
+</div>
+<div class="knowledge-list">
+  <ul id="knowledge-tree" class="ztree" data-url="{{ path('organization_getNodes')}}" data-durl="{{ path('admin_organization_delete')}}" {# data-durl="{{ path('admin_knowledge_delete')}}" data-surl="{{ path('admin_knowledge_sort') }}" #}></ul>
+<div>
+
+{% endblock %}
+

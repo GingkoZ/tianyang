@@ -1,0 +1,53 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}{% if exercise.id %}编辑练习{% else %}添加练习{% endif %} - {{ parent() }}{% endblock %}
+
+ {% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/homework/css/homework-web.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/homework/css/web_min_tianyangtax.css') }}" />
+  {% endblock %}
+  
+{% set side_nav = 'lesson' %}
+
+{% if type|default('after') == 'after' %}
+	{% set script_controller = 'homeworkbundle/controller/course-exercise/exercise' %}
+{% else %}
+	{% set script_controller = 'customwebbundle/controller/course-exercise/middle-exercise' %}
+{% endif %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+     <div class="panel-heading">
+		<ol class="breadcrumb">
+			<li><a href="{{ path('course_manage_lesson',{id:course.id}) }}">课时管理</a></li>
+			<li class="active">{% if exercise.id %}编辑练习{% else %}添加练习{% endif %}</li>
+		</ol>
+	</div>
+  	<div class="panel-body exercise-create-body">
+
+  		<div class="exercise-nav">
+  			<ul class="nav nav-pills" role="tablist">
+  			  <li role="presentation" {% if type|default('after') == 'after' %}class="active" {% endif %}>
+  			  	<a href="{{ path('course_exercise_create', {courseId:course.id, lessonId:lesson.id,type:'after'}) }}">课后练习</a>
+  			  </li>
+          {% if lesson.type == 'video' %}
+  			  <li role="presentation" {% if type|default('after') == 'middle' %}class="active" {% endif %}>
+  			  	<a href="{{ path('course_exercise_create', {courseId:course.id, lessonId:lesson.id,type:'middle'}) }}">课中练习</a>
+  			  </li>
+          {% endif %}
+  			</ul>
+  		</div>
+
+    	<div class="exercise-content">
+ 			{% if type|default('after') == 'after' %}
+ 				{% include 'HomeworkBundle:CourseExerciseManage:after-exercise.html.twig' %}
+ 			{% else %}
+ 				{% include 'HomeworkBundle:CourseExerciseManage:middle-exercise.html.twig' %}
+ 			{% endif %}
+ 		</div>
+  	</div>
+</div>
+
+{% endblock %}

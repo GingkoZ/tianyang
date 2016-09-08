@@ -1,0 +1,42 @@
+<div class="testpaper-question testpaper-question-choice" id="{{ questions.id }}">
+
+  {% set keys = [] %}
+  {% set keys_answer = [] %}
+  <div class="testpaper-question-body">
+    {% include 'CustomWebBundle:CoursewareExercise:question-stem.html.twig' %}
+
+    <ul class="testpaper-question-choices">
+      {% for key, choice in questions.metas.choices %}
+        {% set choiceIndex = (65+key)|chr %}
+        <li><span class="testpaper-question-choice-index">{{ choiceIndex }}.</span> {{ choice|bbCode2Html|raw }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+    <div class="testpaper-question-footer clearfix">
+
+     <div class="testpaper-question-choice-inputs">
+
+        {% for key, choice in questions.metas.choices %}
+          {% set choiceIndex = (65+key)|chr %}
+          {% if key in questions.answer %}
+          {% set keys = keys|merge([choiceIndex]) %}
+        {% endif  %}
+          
+
+          <label class="{% if questions.type == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline {% if choiceIndex in keys_answer %}active{% endif %}">
+            <input type="{% if questions.type == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="choice" name="{{ questions.id }}" value="{{ key }}" {% if choiceIndex in keys_answer %}checked{% endif %} >
+            {{ choiceIndex }}
+          </label> 
+        {% endfor %}
+      </div>
+    </div>
+
+  <div id="answer-show" class="hide red">
+    <div class="testpaper-preview-answer clearfix mtl mbl">
+      <div class="testpaper-question-result">
+      正确答案是 <strong class="text-success">{{ keys|join(',') }}</strong>
+      </div>
+    </div>
+    <div class="testpaper-question-analysis well">{{ questions.analysis|default('无解析')|bbCode2Html|raw }}</div>
+  </div>
+</div>

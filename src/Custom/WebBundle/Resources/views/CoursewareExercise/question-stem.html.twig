@@ -1,0 +1,7 @@
+<div class="testpaper-question-stem-wrap clearfix">
+  <div class="testpaper-question-seq-wrap">
+    <div class="testpaper-question-score">{{ questions.score|default(questions.score) }}分</div>
+  </div>
+  <div class="testpaper-question-stem">{{ questions.stem|bbCode2Html|raw }}</div>
+  
+</div>

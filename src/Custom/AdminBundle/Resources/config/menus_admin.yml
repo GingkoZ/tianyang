@@ -1,0 +1,7 @@
+admin_organization:
+    name: 组织管理
+    parent: admin_user
+    before: admin_teacher
+admin_user_learn_data:
+    name: 用户学习数据
+    parent: admin_course_show

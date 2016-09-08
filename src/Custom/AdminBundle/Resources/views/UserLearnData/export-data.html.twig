@@ -1,0 +1,62 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}学员学习数据导出{% endblock %}
+{% block body %}
+
+<form id="student-learn-data-form" class="form-horizontal" method="post" action="{{ path('admin_user_learn_data_exp') }}">
+ 
+  	<div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="student-nickname">课程:</label>
+      </div>
+      <div class="col-md-7 controls">
+       {{course.title}}
+      
+    	</div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="buy-price">组织:</label>
+      </div>
+      <div class="col-md-7 controls">
+        {{fullOrganizationName}}
+      </div>
+    </div>
+
+    <div class="row form-group">
+    	<div class="col-md-2 control-label">
+    		<input type="checkbox" id="student-remark" name="includeChilds" >
+    	</div>
+    	{% if app.request.query.get('mode') == 'summary' %}
+    	<div class="col-md-7 controls">
+        	<label for="student-remark">同时导出“组织”下设部门的学习统计数据</label>
+      	</div>
+    	{% elseif app.request.query.get('mode') == 'detail' %}
+	        <div class="col-md-7 controls">
+	        	<label for="student-remark">同时导出“组织”下设部门的学员学习数据</label>
+	        </div>
+    	{% endif %}
+   
+      
+    
+    </div>
+ 
+    <input type="hidden" name="course" value="{{ app.request.query.get('course') }}">
+    <input type="hidden" name="organizationId" value="{{ app.request.query.get('organizationId') }}">
+    <input type="hidden" name="startTime" value="{{ app.request.query.get('startTime') }}">
+    <input type="hidden" name="endTime" value="{{ app.request.query.get('endTime') }}">
+    <input type="hidden" name="mode" value="{{ app.request.query.get('mode') }}">
+	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    <button id="student-learn-export-form-submit" type="submit" class="btn btn-primary pull-right"  data-submiting-text="正在导出...">确认导出</button>
+  
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+</form>
+
+{% endblock %}
+{% block footer %}
+ <script>app.load('customadminbundle/controller/UserLearnData/user-learn-data-export')</script>
+{% endblock %}

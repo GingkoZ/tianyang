@@ -1,0 +1,12 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% block title %}请选择组织机构{% endblock %}
+{% block body %}
+<div class="zTreeDemoBackground left">
+  <ul id="organization-tree" class="zTreeStylt" data-url="{{ path('organization_getNodes')}}"   {# data-durl="{{ path('admin_knowledge_delete')}}" data-surl="{{ path('admin_knowledge_sort') }}" #}></ul>
+<div>
+	  <script type="text/javascript"> app.load('customadminbundle/controller/organization/organization-check-modal') </script>
+{% endblock %}
+{% block footer %}
+  	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
+  	<button id="organization-node-checked" data-submiting-text="正在提交" type="button" class="btn btn-primary"  {# data-dismiss="modal" #}  {# data-toggle="form-submit" data-target="#knowledge-form" #} tabindex="5">确定选择</button>
+{% endblock %}

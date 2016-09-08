@@ -1,0 +1,169 @@
+{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
+
+{% block title %}用户学习数据 - {{ parent() }}{% endblock %}
+
+{% set menu = 'user_learn_data' %}
+{% set script_controller = 'customadminbundle/controller/UserLearnData/user-learn-data' %}
+{% 
+  set script_arguments = {
+    courseMatchUrl: path('admin_course_match')
+  } 
+%}
+
+{% block main %}
+  <div class="page-header clearfix">
+      <h1 class="pull-left">用户学习数据</h1>
+       {% if mode == 'search' %}
+      <a href="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_learn_data_exp_confirm', {startTime:app.request.query.get('startTime') ,endTime:app.request.query.get('endTime'),course:app.request.query.get('course'),organizationId:app.request.query.get('organizationId'),mode:"detail"}) }}">学员学习数据导出</a>
+      {% endif %}
+    </div>
+    <form id="user_learn_data-form" class="form-inline well well-sm" action="{{ path('admin_user_learn_data') }}" method="get" novalidate>
+
+  <div class="form-group">
+  
+    <div class="col-md-7 controls">
+      <input type="text" id="course_name" name="course" required="required"   value="{{ course.title|default("") }}"  data-name="{{ course.title|default("")}}" data-id="{{course.id|default("")}}" width="176px" >
+    </div>
+  </div>
+  <div class="form-group">
+    
+    <div class="col-md-4 controls" style="position:relative">
+
+      <input id="citySel" type="text" name="organizationName" readonly class="form-control" value="{{ orgName }}" placeholder="学员组织"  >
+      <input type="hidden" id="organization_id" name="organizationId" value={{ orgId }}  >
+      <div id="menuContent" class="menuContent" style="display:none; position: absolute;z-index:2000 ;left:15px;top:28px">
+        <ul id="treeDemo"  data-url="{{ path('organization_getNodes')}}"  class="zTreeStylt" style="margin-top:0; width:180px; height: 300px;"></ul>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-5 controls">
+      <input type="text" id="startTime" name="startTime" required="required" class="" value="{{app.request.query.get('startTime')}}"  placeholder="开始时间"  >
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-5 controls">
+      <input type="text" id="endTime" name="endTime" required="required" class="" value="{{app.request.query.get('endTime')}}"  placeholder="结束时间"  >
+    </div>
+  </div>
+  
+      <button id="searchButton" class="btn btn-primary">搜索</button>
+    </form>
+    {% if mode == 'search' %}
+    <table class="table table-striped table-hover">
+    <tr>
+      <th>课程：</th><th>{{courseTitle}}</th>
+      <th>课程总时长(分：秒)：</th><th>{{ totalTime|duration }}</th>
+    </tr>    
+        
+    </table>
+    <table class="table table-striped table-hover" >
+       <tr>
+          <th>组织：</th><th>{{ fullOrganizationName }}</th>
+          <th>包含子部门：</th><th>{{ childOrgnaizationCount }}个</th>
+          <th colspan="2"></th>
+          <th rowspan="3" align="center" valign="middle" style="text-align:center;vertical-align:middle">
+            <a href="{{ path('course_create') }}" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_learn_data_exp_confirm', {startTime:app.request.query.get('startTime') ,endTime:app.request.query.get('endTime'),course:app.request.query.get('course'),organizationId:app.request.query.get('organizationId'),mode:"summary"}) }}">部门学习数据导出</a>
+          </th>
+       </tr>
+      <tr>
+        <th>学员人数：</th><th>{{ allStudentsCount }}人</th>
+        <th>平均听课时长（分）：</th><th>{{ averageLearnedTime }}</th>
+        <th>平均听课率：</th><th>{{ averageRate }}</th>
+      </tr>    
+    <tr>
+      <th>完全未听人数：</th><th>{{ neverLearndStudentsCount|default(0) }}人</th>
+      <th>正在听课人数：</th><th>{{ allStudentsCount - neverLearndStudentsCount - finishLearnedStudentCount }}人</th>
+      <th>已完成听课人数：<th>{{ finishLearnedStudentCount }}人</th></th>
+    </tr> 
+    <tr>
+    <th colspan="7">
+      <a class="text-center" id="org-learn-more" href="javascript:;" style="display: block">
+          <span class="glyphicon glyphicon-chevron-down"></span>
+          点此展开/收起子部门的学习统计数据
+           <span class="glyphicon glyphicon-chevron-down"></span>
+      </a>
+      </th>
+    </tr>   
+          
+    </table>
+    {% if orgUserLearnDataSummary %}
+   <table class="table table-striped table-hover" id="org-learn-data-table" style="word-break:break-all; display:none;">
+    <thead>
+          <tr>
+                <th width="30%">组织名称</th>
+                <th  width="5%" >包含子部门</th>
+                
+                <th width="5%">学员人数</th>
+                <th width="10%">平均听课时长（分）</th>
+                
+                <th width="5%">平均听课率</th>
+                <th width="5%">完全未听人数</th>
+                <th width="5%">正在听课人数</th>
+                <th width="5%">已完成听课</th>
+          </tr>
+    </thead>
+    <tbody>
+        {% for itme in orgUserLearnDataSummary %}
+        <tr>
+          <td>{{ itme.fullOrganizationName }}</td>
+          <td>{{ itme.allChildCount }}
+          </td>
+          <td>{{ itme.allStudentsCount}}</td>
+          <td>{{ itme.averageLearnedTime}}
+          </td>
+          <td>{{ itme.averageRate }}</td>
+          <td>{{ itme.neverLearndStudentsCount}}</td>
+          <td>{{ itme.finishLearnedStudentCount}}</td> 
+          <td>{{ itme.learningStudentCount }}</td>
+        </tr>
+
+        {% else %}
+          <tr>
+            <td colspan="20"><div class="empty">暂无记录</div></td>
+          </tr>
+        {% endfor %}
+    </tbody>
+   </table>
+   {% endif %}
+   {% endif %}
+    <table class="table table-striped table-hover" id="learn-data-table" style="word-break:break-all;">
+  <thead>
+    <tr>
+    <th>编号</th>
+    <th width="30%">姓名/手机号</th>
+    
+    <th>用户名</th>
+    <th>所属组织/邮箱</th>
+    
+    <th>学习总时长（分）</th>
+    <th>听课率</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for itme in list %}
+    <tr id="user-learn-data-tr-{{ itme.id }}">
+      <td>{{ itme.id }}</td>
+      <td>{{ itme.truename }}
+        <br>
+        {{ itme.mobile}}
+      </td>
+      
+      <td>{{ itme.nickname}}</td>
+      <td>{{ itme.organizationFullPath}}
+        <br>
+        {{ itme.email}}
+      </td>
+      
+      <td>{{ itme.watchTime }}</td>
+      <td>{{ itme.learnLessonRate}}</td>
+    </tr>
+
+  {% else %}
+    <tr>
+      <td colspan="20"><div class="empty">暂无记录</div></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

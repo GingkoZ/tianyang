@@ -1,0 +1,62 @@
+
+smvp_video:
+    pattern:  /smvp/video/{courseId}/lesson/{lessonId}
+    defaults: { _controller: CustomWebBundle:SmvpVideo:lesson }
+
+
+
+settings:
+    pattern:  /settings/
+    defaults: { _controller: CustomWebBundle:Settings:profile }
+organization_userId_getNodes:
+    pattern:  /organization/userId/getNodes
+    defaults: { _controller: CustomWebBundle:Organization:getNodesByUseId }
+organization_getNodes:
+    pattern:  /organization/getNodes
+    defaults: { _controller: CustomWebBundle:Organization:getNodes }
+course_manage_students:
+    pattern:  /course/{id}/manage/students
+    defaults: { _controller: CustomWebBundle:CourseStudentManage:index }
+course_manage_batch_students:
+    pattern:  /course/{id}/manage/batch/students
+    defaults: { _controller: CustomWebBundle:CourseStudentManage:batchStudents }
+
+classroom_manage_student_batch_create:
+    pattern:  /classroom/{id}/manage/batch/students/create
+    defaults: { _controller: CustomWebBundle:CustomClassroomManage:batchCreate }
+classroom_manage_student_batch_base:
+    pattern:  /classroom/{id}/manage/batch/students/base
+    defaults: { _controller: CustomWebBundle:CustomClassroomManage:batchBase }
+
+mapi_mobile_api:
+    pattern:  /mapi_v2/{service}/{method}
+    defaults: { _controller: CustomWebBundle:CustomMobileApi:index }
+    methods: [GET, POST]
+
+    # classroom_manage_student_create:
+    # pattern:  /classroom/{id}/manage/student/create
+    # defaults: { _controller: ClassroomBundle:ClassroomManage:create }
+courseware_exercise_add:
+    pattern:  /course/{courseId}/lesson/{lessonId}/courseware/exercise/add
+    defaults: { _controller: CustomWebBundle:CustomCourseExercise:add }
+
+coursewave_exercise_delete:
+    pattern: /coursewave/lesson/exercise/{id}/delete
+    defaults: { _controller: CustomWebBundle:CustomCourseExercise:deleteMediaLessonExercise }
+
+coursewave_exercise_find:
+    pattern: /coursewave/lesson/exercise
+    defaults: { _controller: CustomWebBundle:CustomCourseExercise:findQuestionsExercise}
+
+
+coursewave_question_answer_check:
+    pattern: /coursewave/question/{questionId}/questionId/answer/check
+    defaults: { _controller: CustomWebBundle:CustomCourseExercise:QuestionsAnswerCheckExercise}
+
+course_exercise_create:
+    pattern:  /course/{courseId}/lesson/{lessonId}/exercise/create
+    defaults: { _controller: CustomWebBundle:CourseExerciseManage:createExercise }
+
+coursewave_exercise_media_lesson_find:
+    pattern:  /coursewave/lesson/media/exercise
+    defaults: { _controller: CustomWebBundle:CustomCourseExercise:findMediaLessonExercise}

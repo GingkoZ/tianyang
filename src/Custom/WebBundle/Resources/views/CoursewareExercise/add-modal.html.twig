@@ -1,0 +1,85 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}添加练习题{% endblock %}
+{% set modal_class = 'modal-lg' %}
+{% block body %}
+
+    <div class="point">
+    	<span class="text-muted">说明:将在选择的题目中，随机出题，最多选择 5 道<span>
+    </div>
+    <div class="execrcise-tips">
+      <div class="row">
+        <div class="col-md-6"><span class="text-muted">已选择 <big>{{ mediaLessonExerciseCount|default(0) }}</big> &nbsp;道</span> </div>
+        <div class="col-md-6" style="border-left:2px solid #eee;"><span class="text-muted">时间点: {{ showtime | duration }} </span></div>
+      </div>
+    </div>
+
+    <form id="search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+      <input type="hidden" name="showtime" />
+      <div class="form-group" id="tages-search-group">
+         <label>题干：</label>
+            <a href="javascript:;" class="tag-search-trigger">
+             </a>
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="text" name="stem"  placeholder="题目关键词">
+      </div>
+
+      <a class="btn btn-primary search-btn" data-search-text="搜索中..." data-url="{{ path('courseware_exercise_add', {courseId:courseId, lessonId:lessonId}) }}" >搜索</a>
+    </form>
+
+    <form action="{{ path('courseware_exercise_add', {courseId:courseId, lessonId:lessonId}) }}" method="post" id="block-form">
+      <div class="form-group">
+        <label class="col-md-3 control-label" for="questionIds">标签名称</label>
+        <div class="col-md-6 controls">
+        
+        </div>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <input type="hidden" name="showtime" value="{{ showtime }}">
+
+        <div class="form-group">
+          <label class="col-md-3 control-label" for="exerciseCount">标签名称</label>
+          <div class="col-md-6 controls">
+            <input type="hidden" id="exerciseCount" name="mediaLessonExerciseCount" value="{{ mediaLessonExerciseCount|default(0) }}"/>
+          </div>
+        </div>
+     
+      <table class="table table-striped table-hover question-table">
+        <thead>
+          <tr>
+            <th width="10%"><input type="checkbox" disabled></th>
+            <th width="80%">题干</th>
+            <th width="10%">类型</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for question in questions|default(null) %}
+          <tr>
+            <td>
+              <input type="checkbox" id="questionId" name="questionId[]" class="checknum" value="{{question.id}}"/>
+            </td>
+            <td>{{ question.stem |fill_question_stem_text| plain_text(40) }}</td>
+            <td>{{ dict('questionType')[question.type] }}</td>
+          </tr>
+          {% else %}
+          <tr ><td class="empty" colspan="4">没有题目!</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </form>
+
+
+{% endblock %}
+
+
+
+{% block footer %}
+    
+  <button type="button" class="btn btn-link pull-right closeExercise" data-dismiss="modal">关闭</button>
+  
+  <button type="submit" id="block-btn" class="btn btn-primary pull-right" data-role="batch-select-save" data-toggle="form-submit" data-target="#block-form" >确定</button>
+  <script>
+  app.load('customwebbundle/controller/courseware/add-modal');
+  </script>
+{% endblock %}

@@ -1,0 +1,106 @@
+<!doctype html>
+
+<head>
+<meta content="{{ csrf_token('site') }}" name="csrf-token" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+<link rel="stylesheet" media="screen" href="{{ asset('bundles/customweb/css/smvp.css') }}" />
+</head>
+<body>
+	<input id="courseId" type="hidden" value="{{ courseId }}"></input>
+  	<input id="lessonId" type="hidden" value="{{ lessonId }}"></input>
+   {{url|raw}}
+   <script>
+  var app = {};
+  app.basePath = '';
+  app.jsPaths = {"common":"common","theme":"\/themes\/default-b\/js","couponbundle":"\/bundles\/coupon\/js","questionplusbundle":"\/bundles\/questionplus\/js","vipbundle":"\/bundles\/vip\/js","customwebbundle":"\/bundles\/customweb\/js","customadminbundle":"\/bundles\/customadmin\/js","homeworkbundle":"\/bundles\/homework\/js"};
+
+  app.mainScript = "{{ asset('bundles/topxiaweb/js/app.js') }}";
+</script>
+
+<script src="{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js') }}"></script>
+<script src="{{ asset('assets/libs/seajs-global-config.js') }}"></script>
+
+<script>
+
+seajs.use(app.mainScript, function(){
+  seajs.use("/bundles/customweb/js/controller/smvp/smvp",
+  function(player){
+
+
+  var recordWatchTimeId = 0;
+  $lessonId = $("#lessonId").val();
+  $courseId = $("#courseId").val();
+  var $jqbtn = $(".finish-btn", window.parent.document);
+	
+	$jqbtn.hide();
+
+  var datas;
+  var time = 0;
+  getShowQTimes();
+
+    player.ready(function() {
+      
+      player.start(function() {
+
+      }).complete(function() {
+        $jqbtn.show();
+        player.paused = true;
+      }).play(function() {
+        player.paused = false;
+      }).pause(function() {
+        player.paused = true;
+      }).progress(function(e){  
+        var showtime = e.time;
+        showtime = isShow(showtime);
+        if(showtime){
+          showModal(showtime);
+        }
+      });
+    });
+
+    function getShowQTimes() {
+
+      $.ajax({
+        type: "GET",
+        url: "/coursewave/lesson/media/exercise",
+        async:false,
+        data: {lessonId:$lessonId},
+        success: function(data){
+          $.unique(data);
+          datas = data;
+        }
+      });
+      
+    }
+
+    function isShow(showtime) {
+      if($.inArray(""+parseInt(showtime)+"", datas) >= 0){ 
+          if(parseInt(showtime) != time) {
+            time = parseInt(showtime);
+            return showtime;
+          }
+      }
+
+    }
+
+    function showModal(showtime)
+    {
+      $.get("/coursewave/lesson/exercise",{showtime:showtime,lessonId:$lessonId},function(html){
+        if(html){
+          $modal = $('#modal', window.parent.document);
+          $modal.html(html);
+          $modal.modal({
+          keyboard: false,
+          backdrop: 'static'
+          }); 
+          player.pause();
+        }
+      });
+    }
+
+  });
+});
+
+</script>
+</body>
+</html>

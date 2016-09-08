@@ -1,0 +1,28 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th width="10%">序号</th>
+      <th width="20%">练习出现时间点</th>
+      <th width="60%">题目</th>
+      <th width="10%">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for exercise in exercises|default(null) %}
+       {% set question = questions[exercise.questionId] %}
+
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ exercise.showtime|duration }}</td>
+        <td>{{ question.stem |fill_question_stem_text| plain_text(40) }}</td>
+        <td style="cursor:pointer">
+          <a class="btn-link glyphicon glyphicon-eye-open" href   ="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"></a>
+          <a class="btn-link glyphicon glyphicon-trash deleteExercise" data-role="deleteExercise" data-url="{{ path('coursewave_exercise_delete', {id:exercise.id}) }}"></a>
+        </td>
+      </tr>
+    {% else %}
+      <tr ><td class="empty" colspan="4">还没有练习!</td></tr>
+    {% endfor %}
+    
+  </tbody>
+</table>

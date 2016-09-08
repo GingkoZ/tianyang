@@ -1,0 +1,17 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% endblock %}
+{% block body %}
+  {% include 'CustomWebBundle:CoursewareExercise:video-' ~ questions.types ~ '-preview.html.twig' %}
+{% endblock %}
+
+{% block footer %}
+
+    <button class="btn btn-primary" id="save-btn" type="submit" data-submiting-text="正在保存..."data-url="{{ path('coursewave_question_answer_check',{questionId:questions.id}) }}">确定</button>
+    <button id="cancel-btn" class="btn btn-link" data-dismiss="modal">关闭</button>
+
+    <script>
+    app.load('customwebbundle/controller/courseware/preveiw-modal');
+    </script>
+    
+{% endblock %}

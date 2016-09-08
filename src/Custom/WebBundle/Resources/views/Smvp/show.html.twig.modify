@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0">
+
+	<link rel="stylesheet" media="screen" href="{{ asset('bundles/customweb/css/smvp.css') }}" />
+	
+</head>
+<body>
+    <input id="courseId" type="hidden" value="{{ courseId }}"></input>
+    <input id="lessonId" type="hidden" value="{{ lessonId }}"></input>
+
+ 	{{url|raw}}
+ 	
+ 	<script type="javascript" src="{{ asset('bundles/customweb/js/show.js') }}" />
+
+</body>
+</html>
+
+ 
+
+
